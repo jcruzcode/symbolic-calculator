@@ -1,3 +1,17 @@
+//************ TO DO ****************************
+/*
+1) Buttons
+  - PI
+  - Letters a-z (A-Z, too?)
+
+2) Local Storage
+  - Save last 5 expressions entered in local storage
+  - Maybe last answer(s) too?
+
+3) Include decimal output
+  - Include option to display result as a floating point number
+*/
+
 // Define the Calculator class which will encapsulate all calculator operations and behaviors.
 class Calculator {
     // Constructor initializes default state of the calculator.
@@ -144,7 +158,6 @@ const actions = {
     '#tangent' : 'tan',
     '#cosineInverse' : 'arccos',
     '#sineInverse' : 'arcsin',
-    '#tangentInverse' : 'arctan',
     '#absoluteValue' : 'abs',
     '#logarithm' : 'log',
 }
