@@ -24,7 +24,7 @@ class Calculator {
         // Allow arithmetic operators to be appended after 0.
         // Otherwise, replace the initial 0 with the character or append the character.
         // ...
-        if (this.displayValue === '0' && ['+', '-', '*', '/', '(', ')', '|'].includes(char)) {
+        if (this.displayValue === '0' && ['+', '-', '*', '/', '|'].includes(char)) {
             this.displayValue += ` ${char} `;
         } else if (this.displayValue === '0') {
             this.displayValue = String(char);
@@ -49,6 +49,7 @@ class Calculator {
         fetch(url)
             .then(res => res.json()) // parse response as JSON
             .then(data => {
+                console.log(url);
                 console.log(data)
                 this.displayValue = `${data.result}`;
                 this.updateUI();
@@ -76,8 +77,7 @@ const calc = new Calculator();
 document.querySelector('.clear-btn').addEventListener('click', () => calc.clear());
 // Add a decimal point to the current number on the display.
 document.querySelector('#dot').addEventListener('click', () => calc.addDot());
-// Evaluate the current expression on the display when the equals button is clicked.
-document.querySelector('#equals').addEventListener('click', () => calc.evaluate());
+
 
 // Define a mapping of DOM elements to their respective arithmetic operations.
 const operators = {
@@ -131,6 +131,24 @@ const encodeURL = {
     "~": "%7E"
 }
 
+const actions = {
+    '#equals' : 'simplify',
+    '#factor' : 'factor',
+    '#derive' : 'derive',
+    '#integrate' : 'integrate',
+    '#zeros' : 'zeroes',
+    '#tangentPoint' : 'tangent',
+    '#area' : 'area',
+    '#cosine' : 'cos',
+    '#sine' : 'sin',
+    '#tangent' : 'tan',
+    '#cosineInverse' : 'arccos',
+    '#sineInverse' : 'arcsin',
+    '#tangentInverse' : 'arctan',
+    '#absoluteValue' : 'abs',
+    '#logarithm' : 'log',
+}
+
 // Loop through each operator button and attach an event listener.
 // On click, the respective arithmetic operation is appended to the display.
 for (const [key, value] of Object.entries(operators)) {
@@ -141,6 +159,12 @@ for (const [key, value] of Object.entries(operators)) {
 for (let i = 0; i <= 9; i++) {
     document.querySelector(`#num${i}`).addEventListener('click', () => calc.updateDisplay(i));
 }
+
+// Evaluate the current expression on the display based on which function is clicked.
+for ( const [key, value] of Object.entries(actions) ) {
+    document.querySelector(key).addEventListener('click', () => calc.evaluate(value));
+}
+
 
 // Modal JS
 let modal = document.getElementById("myModal");
