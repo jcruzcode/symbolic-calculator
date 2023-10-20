@@ -1,14 +1,10 @@
 //************ TO DO ****************************
 /*
-1) Buttons
-  - PI
-  - Letters a-z (A-Z, too?)
-
-2) Local Storage
+1) Local Storage
   - Save last 5 expressions entered in local storage
   - Maybe last answer(s) too?
 
-3) Include decimal output
+2) Include decimal output
   - Include option to display result as a floating point number
 */
 
@@ -27,6 +23,16 @@ class Calculator {
     updateUI() {
         this.displayElement.innerText = this.displayValue;
     }
+
+    getLast() {
+        if ( localStorage.getItem('expression') ) {
+            this.displayValue = localStorage.getItem('expression');
+        } else {
+            this.displayValue = '0';
+        }
+        this.updateUI();
+    }
+
     // Reset the calculator display to its initial state.
     clear() {
         this.displayValue = '0';
@@ -38,7 +44,7 @@ class Calculator {
         // Allow arithmetic operators to be appended after 0.
         // Otherwise, replace the initial 0 with the character or append the character.
         // ...
-        if (this.displayValue === '0' && ['+', '-', '*', '/', '|'].includes(char)) {
+        if (this.displayValue === '0' && ['+', '-', '*', '/', '|', ':'].includes(char)) {
             this.displayValue += ` ${char} `;
         } else if (this.displayValue === '0') {
             this.displayValue = String(char);
@@ -48,8 +54,15 @@ class Calculator {
         // Update the UI after modifying the internal state.
         this.updateUI();
     }
+
+    delete() {
+        const len = this.displayValue.length;
+        this.displayValue = this.displayValue.slice(0, len - 2);
+        this.updateUI();
+    }
     // Evaluate the arithmetic expression displayed on the calculator.
     evaluate(operation) {
+        localStorage.setItem('expression', this.displayValue);
         const chars = this.displayValue.split('');
 
         for (let i = 0; i < chars.length; i++) {
@@ -106,6 +119,35 @@ const operators = {
     '#colon': ':',
     '#x': 'x',
     '#y': 'y',
+    '#pi': 'pi',
+    "#a": "a",
+    "#b": "b",
+    "#c": "c",
+    "#d": "d",
+    "#e": "e",
+    "#f": "f",
+    "#g": "g",
+    "#h": "h",
+    "#i": "i",
+    "#j": "j",
+    "#k": "k",
+    "#l": "l",
+    "#m": "m",
+    "#n": "n",
+    "#o": "o",
+    "#p": "p",
+    "#q": "q",
+    "#r": "r",
+    "#s": "s",
+    "#t": "t",
+    "#u": "u",
+    "#v": "v",
+    "#w": "w",
+    "#x": "x",
+    "#y": "y",
+    "#z": "z",
+
+
 };
 
 // Each character (or string) encoding for use in a URL
@@ -146,20 +188,20 @@ const encodeURL = {
 }
 
 const actions = {
-    '#equals' : 'simplify',
-    '#factor' : 'factor',
-    '#derive' : 'derive',
-    '#integrate' : 'integrate',
-    '#zeros' : 'zeroes',
-    '#tangentPoint' : 'tangent',
-    '#area' : 'area',
-    '#cosine' : 'cos',
-    '#sine' : 'sin',
-    '#tangent' : 'tan',
-    '#cosineInverse' : 'arccos',
-    '#sineInverse' : 'arcsin',
-    '#absoluteValue' : 'abs',
-    '#logarithm' : 'log',
+    '#equals': 'simplify',
+    '#factor': 'factor',
+    '#derive': 'derive',
+    '#integrate': 'integrate',
+    '#zeros': 'zeroes',
+    '#tangentPoint': 'tangent',
+    '#area': 'area',
+    '#cosine': 'cos',
+    '#sine': 'sin',
+    '#tangent': 'tan',
+    '#cosineInverse': 'arccos',
+    '#sineInverse': 'arcsin',
+    '#absoluteValue': 'abs',
+    '#logarithm': 'log',
 }
 
 // Loop through each operator button and attach an event listener.
@@ -174,26 +216,37 @@ for (let i = 0; i <= 9; i++) {
 }
 
 // Evaluate the current expression on the display based on which function is clicked.
-for ( const [key, value] of Object.entries(actions) ) {
+for (const [key, value] of Object.entries(actions)) {
     document.querySelector(key).addEventListener('click', () => calc.evaluate(value));
 }
 
+document.querySelector('#last').addEventListener('click', () => calc.getLast());
+document.querySelector('#delete').addEventListener('click', () => calc.delete());
+
 
 // Modal JS
-let modal = document.getElementById("myModal");
-let btn = document.getElementById("advancedFunctions");
-let span = document.getElementsByClassName("close")[0];
+function initModal(modalId, btnId) {
+    let modal = document.getElementById(modalId);
+    let btn = document.getElementById(btnId);
+    let span = modal.getElementsByClassName("close")[0];
 
-btn.onclick = function () {
-    modal.style.display = "block";
-}
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
 
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-    if (event.target == modal) {
+    span.onclick = function () {
         modal.style.display = "none";
     }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 }
+
+// Initialize the first modal
+initModal('myModal', 'advancedFunctions');
+initModal('myModal1', 'letters');
+// To initialize another modal, simply call the function with the new IDs
+// initModal('secondModalId', 'secondButtonId');
