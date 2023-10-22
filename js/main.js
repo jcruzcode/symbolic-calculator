@@ -57,7 +57,7 @@ class Calculator {
 
     delete() {
         const len = this.displayValue.length;
-        this.displayValue = this.displayValue.slice(0, len - 2);
+        this.displayValue = this.displayValue.slice(0, len - 1);
         this.updateUI();
     }
     // Evaluate the arithmetic expression displayed on the calculator.
